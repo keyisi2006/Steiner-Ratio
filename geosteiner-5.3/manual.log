@@ -1,0 +1,1424 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=latex 2024.6.23)  29 MAR 2025 17:23
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**manual
+(./manual.tex
+LaTeX2e <2024-06-01> patch level 1
+L3 programming layer <2024-05-27>
+(d:/texlive/2024/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2024/02/08 v1.4n Standard LaTeX document class
+(d:/texlive/2024/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2024/02/08 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count194
+\c@section=\count195
+\c@subsection=\count196
+\c@subsubsection=\count197
+\c@paragraph=\count198
+\c@subparagraph=\count199
+\c@figure=\count266
+\c@table=\count267
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen141
+) (d:/texlive/2024/texmf-dist/tex/latex/psnfss/times.sty
+Package: times 2020/03/25 PSNFSS-v9.3 (SPQR) 
+) (d:/texlive/2024/texmf-dist/tex/latex/graphics/epsfig.sty
+Package: epsfig 2024/01/14 v1.7b (e)psfig emulation (SPQR)
+(d:/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+(d:/texlive/2024/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+) (d:/texlive/2024/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2024/05/23 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+(d:/texlive/2024/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
+) (d:/texlive/2024/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: dvips.def on input line 106.
+(d:/texlive/2024/texmf-dist/tex/latex/graphics-def/dvips.def
+File: dvips.def 2022/09/22 v3.1e Graphics/color driver for dvips
+))
+\Gin@req@height=\dimen142
+\Gin@req@width=\dimen143
+)
+\epsfxsize=\dimen144
+\epsfysize=\dimen145
+) (d:/texlive/2024/texmf-dist/tex/latex/base/makeidx.sty
+Package: makeidx 2021/10/04 v1.0m Standard LaTeX package
+) (d:/texlive/2024/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2024-01-22 v1.5x LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks18
+\verbatim@line=\toks19
+\verbatim@in@stream=\read2
+)
+\@indexfile=\write3
+\openout3 = `manual.idx'.
+
+Writing index file manual.idx
+LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 8
+4.
+(d:/texlive/2024/texmf-dist/tex/latex/psnfss/ot1ptm.fd
+File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
+) (d:/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-dvips.def
+File: l3backend-dvips.def 2024-05-08 L3 backend support: dvips
+\l__pdf_internal_box=\box52
+\l__pdf_backend_content_box=\box53
+\l__pdf_backend_model_box=\box54
+\g__pdf_backend_annotation_int=\count268
+\g__pdf_backend_link_int=\count269
+\g__pdf_backend_link_sf_int=\count270
+) (./manual.aux)
+\openout1 = `manual.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 84.
+LaTeX Font Info:    ... okay on input line 84.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 84.
+LaTeX Font Info:    ... okay on input line 84.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 84.
+LaTeX Font Info:    ... okay on input line 84.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 84.
+LaTeX Font Info:    ... okay on input line 84.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 84.
+LaTeX Font Info:    ... okay on input line 84.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 84.
+LaTeX Font Info:    ... okay on input line 84.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 84.
+LaTeX Font Info:    ... okay on input line 84.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 9
+6.
+(d:/texlive/2024/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
+)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+[1
+
+]
+
+[2]
+
+[3
+
+] (./manual.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 2.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 2.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 2.
+
+
+[1
+
+])
+\tf@toc=\write4
+\openout4 = `manual.toc'.
+
+
+
+[2]
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 1
+23.
+(d:/texlive/2024/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+)
+
+[3
+
+]
+
+[4
+
+]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 178.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 178.
+
+
+[1
+
+]
+File: fig_ESMT.eps Graphic file (type eps)
+<fig_ESMT.eps>
+File: fig_RSMT.eps Graphic file (type eps)
+<fig_RSMT.eps>
+File: fig_HSMT.eps Graphic file (type eps)
+<fig_HSMT.eps>
+File: fig_OSMT.eps Graphic file (type eps)
+<fig_OSMT.eps>
+Overfull \hbox (3.88583pt too wide) in paragraph at lines 234--240
+[][] 
+ []
+
+
+Overfull \hbox (0.66763pt too wide) in paragraph at lines 246--253
+[]\OT1/ptm/m/n/12 All met-rics cur-rently han-dled by Geo-Steiner are \OT1/ptm/
+m/it/12 uni-formly ori-ented met-rics\OT1/ptm/m/n/12 : Given
+ []
+
+
+
+[2]
+
+[3]
+Overfull \hbox (11.2526pt too wide) in paragraph at lines 325--329
+\OT1/ptm/m/n/12 Win-ter and Zachari-asen pub-lished an im-proved al-go-rithm ca
+lled ``GeoSteiner96'' [[]]. 
+ []
+
+
+
+[4]
+Overfull \hbox (4.91623pt too wide) in paragraph at lines 347--353
+[]\OT1/ptm/m/n/12 Geo-Steiner 4.0 was a pro-pri-etary com-mer-cial prod-uct whi
+ch in-tro-duced the callable
+ []
+
+
+
+[5]
+File: "demo1.notabs"  (verbatim)
+
+
+[6
+
+]
+
+[7]
+File: "demo2.notabs"  (verbatim)
+
+Overfull \hbox (8.40025pt too wide) in paragraph at lines 430--430
+[]        \OT1/pcr/m/n/8 gst_set_dbl_param (params, GST_PARAM_GAP_TARGET, 1.0 +
+ (max_excess/100.0));[] 
+ []
+
+
+LaTeX Warning: Float too large for page by 81.40186pt on input line 435.
+
+File: "demo3.notabs"  (verbatim)
+
+LaTeX Warning: Float too large for page by 90.90186pt on input line 457.
+
+File: "demo4.notabs"  (verbatim)
+
+Overfull \hbox (37.20027pt too wide) in paragraph at lines 488--488
+[]                                \OT1/pcr/m/n/8 gst_get_dbl_property (gst_get_
+solver_properties (solver),[] 
+ []
+
+
+Overfull \hbox (32.40027pt too wide) in paragraph at lines 488--488
+[]                                                      \OT1/pcr/m/n/8 GST_PROP
+_SOLVER_LOWER_BOUND, &lb);[] 
+ []
+
+
+Overfull \hbox (37.20027pt too wide) in paragraph at lines 488--488
+[]                                \OT1/pcr/m/n/8 gst_get_dbl_property (gst_get_
+solver_properties (solver),[] 
+ []
+
+
+Overfull \hbox (22.80026pt too wide) in paragraph at lines 488--488
+[]                                                      \OT1/pcr/m/n/8 GST_PROP
+_SOLVER_CPU_TIME, &cpu);[] 
+ []
+
+
+Overfull \hbox (18.00026pt too wide) in paragraph at lines 488--488
+[]                                \OT1/pcr/m/n/8 printf ("Time: %.2f. LB = %f, 
+UB = %f, ratio = %f\n",[] 
+ []
+
+
+Overfull \hbox (37.20027pt too wide) in paragraph at lines 488--488
+[]                                \OT1/pcr/m/n/8 gst_get_dbl_property (gst_get_
+solver_properties (solver),[] 
+ []
+
+
+Overfull \hbox (22.80026pt too wide) in paragraph at lines 488--488
+[]                                                      \OT1/pcr/m/n/8 GST_PROP
+_SOLVER_CPU_TIME, &cpu);[] 
+ []
+
+
+Overfull \hbox (61.20029pt too wide) in paragraph at lines 488--488
+[]                                \OT1/pcr/m/n/8 printf ("Time: %.2f. No feasib
+le solution found yet.\n", cpu);[] 
+ []
+
+
+LaTeX Warning: Float too large for page by 86.40186pt on input line 495.
+
+
+
+[8]
+
+[9]
+
+[10]
+Overfull \hbox (11.79211pt too wide) in paragraph at lines 497--504
+[]\OT1/ptm/m/n/12 In the main loop of the pro-gram we run the MSTHG solver by c
+all-ing \OT1/ptm/b/n/12 gst[]hg[]solve()\OT1/ptm/m/n/12 ,
+ []
+
+
+
+[11]
+
+[12]
+
+[13
+
+]
+Overfull \hbox (10.65245pt too wide) in paragraph at lines 606--620
+[]\OT1/ptm/m/n/12 During ex-e-cu-tion of its li-brary func-tions, Geo-Steiner e
+n-ables the de-liv-ery of floating-
+ []
+
+
+Overfull \hbox (3.24744pt too wide) in paragraph at lines 638--647
+\OT1/ptm/m/n/12 the pa-ram-e-ter(s) in this set. A pointer to the pa-ram-e-ter 
+set (type \OT1/pcr/m/n/12 gst[]param[]ptr\OT1/ptm/m/n/12 )
+ []
+
+
+Overfull \hbox (18.29707pt too wide) in paragraph at lines 638--647
+\OT1/ptm/m/n/12 fect. When-ever a Geo-Steiner func-tion ac-cepts an ar-gu-ment 
+of type \OT1/pcr/m/n/12 gst[]param[]ptr\OT1/ptm/m/n/12 ,
+ []
+
+
+
+[14]
+
+[15]
+Overfull \hbox (17.27592pt too wide) in paragraph at lines 802--807
+ \OT1/ptm/b/n/12 Chan-nel[] \OT1/ptm/m/n/12 All out-put mes-sages from Geo-Stei
+ner are passed through user-controllable
+ []
+
+
+Overfull \hbox (12.96758pt too wide) in paragraph at lines 802--807
+\OT1/ptm/m/n/12 chan-nels. A given chan-nel may write its out-put to more than 
+one out-put (screen/files).
+ []
+
+(./functions.tex
+
+[16]
+
+[17
+
+]
+
+[18
+
+]
+
+[19
+
+]
+
+[20
+
+]
+
+[21
+
+]
+Overfull \hbox (12.0pt too wide) in paragraph at lines 159--159
+[]\OT1/pcr/m/n/10 /* At this point both GeoSteiner and the LP solver are opened
+... */[] 
+ []
+
+
+
+[22
+
+]
+
+[23
+
+]
+
+[24
+
+]
+
+[25
+
+]
+
+[26
+
+]
+
+[27
+
+]
+
+[28
+
+]
+
+[29
+
+]
+
+[30
+
+]
+
+[31
+
+]
+Underfull \vbox (badness 1668) has occurred while \output is active []
+
+
+
+[32
+
+]
+
+[33]
+
+[34
+
+]
+
+[35
+
+]
+
+[36
+
+]
+
+[37
+
+]
+Underfull \hbox (badness 6001) in paragraph at lines 807--807
+[]\OT1/ptm/m/n/12 Parameter ID of dou-ble pa-ram-e-ter to mod-ify
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 819--819
+[]\OT1/pcr/m/n/10 /* Set a CPU time limit of 0.5 seconds for parameter set mypa
+ram */ 
+ []
+
+
+
+[38
+
+]
+Underfull \hbox (badness 7888) in paragraph at lines 844--844
+[]\OT1/ptm/m/n/12 Parameter ID of dou-ble pa-ram-e-ter to ac-cess
+ []
+
+
+
+[39
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 885--885
+[]\OT1/ptm/m/n/12 Parameter ID of dou-ble pa-ram-e-ter to query
+ []
+
+
+
+[40
+
+]
+
+[41]
+Underfull \hbox (badness 5802) in paragraph at lines 946--946
+[]\OT1/ptm/m/n/12 Parameter ID of in-te-ger pa-ram-e-ter to mod-ify
+ []
+
+
+Overfull \hbox (6.0pt too wide) in paragraph at lines 959--959
+[]\OT1/pcr/m/n/10 gst_set_int_param (myparam, GST_PARAM_NUM_FEASIBLE_SOLUTIONS,
+ 10);[] 
+ []
+
+
+
+[42
+
+]
+Underfull \hbox (badness 7649) in paragraph at lines 984--984
+[]\OT1/ptm/m/n/12 Parameter ID of in-te-ger pa-ram-e-ter to ac-cess
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 997--997
+[]\OT1/pcr/m/n/10 gst_get_int_param(myparam, GST_PARAM_BACKTRACK_MAX_VERTS, &vl
+imit);[] 
+ []
+
+
+Overfull \hbox (30.0pt too wide) in paragraph at lines 998--998
+[]\OT1/pcr/m/n/10 printf ("The current backtrack search vertex limit is %d.\n",
+ vlimit);[] 
+ []
+
+
+
+[43
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 1026--1026
+[]\OT1/ptm/m/n/12 Parameter ID of in-te-ger pa-ram-e-ter to query
+ []
+
+
+
+[44
+
+]
+
+[45]
+Underfull \hbox (badness 10000) in paragraph at lines 1088--1088
+[]\OT1/ptm/m/n/12 Parameter ID of string pa-ram-e-ter to ac-cess
+ []
+
+
+
+[46
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 1135--1135
+[]\OT1/ptm/m/n/12 Parameter ID of string pa-ram-e-ter to ac-cess
+ []
+
+
+
+[47
+
+]
+
+[48]
+Underfull \hbox (badness 1259) in paragraph at lines 1197--1197
+[]\OT1/ptm/m/n/12 Parameter ID of a chan-nel pa-ram-e-ter to mod-ify
+ []
+
+
+Overfull \hbox (30.0pt too wide) in paragraph at lines 1217--1217
+[]\OT1/pcr/m/n/10 code = gst_set_chn_param (myparam, GST_PARAM_PRINT_SOLVE_TRAC
+E, chan);[] 
+ []
+
+
+
+[49
+
+]
+Underfull \hbox (badness 5741) in paragraph at lines 1246--1246
+[]\OT1/ptm/m/n/12 Parameter ID of chan-nel pa-ram-e-ter to ac-cess
+ []
+
+
+
+[50
+
+]
+
+[51
+
+]
+
+[52
+
+]
+
+[53
+
+]
+
+[54
+
+]
+Underfull \hbox (badness 2205) in paragraph at lines 1480--1480
+[]\OT1/ptm/m/n/12 Metric type (see macro val-ues in the ta-ble on
+ []
+
+
+
+[55
+
+]
+
+[56
+
+]
+
+[57
+
+]
+
+[58
+
+]
+
+[59
+
+]
+
+[60
+
+]
+
+[61
+
+]
+
+[62
+
+]
+
+[63
+
+]
+Overfull \hbox (30.0pt too wide) in paragraph at lines 1880--1880
+[]   \OT1/pcr/m/n/10 case GST_PROPTYPE_DOUBLE:  /* Property is a floating point
+ value */[] 
+ []
+
+
+
+[64
+
+]
+
+[65
+
+]
+
+[66
+
+]
+
+[67
+
+]
+
+[68
+
+]
+
+[69]
+
+[70
+
+]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 2198--2198
+[]\OT1/pcr/m/n/10 gst_set_dbl_property (plist, GST_PROP_USER_MY_DBL_VALUE, 2.71
+828);[] 
+ []
+
+
+
+[71
+
+]
+
+[72
+
+]
+
+[73
+
+]
+
+[74
+
+]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 2356--2356
+[]        \OT1/pcr/m/n/10 status = gst_set_hg_edges (h, 4, edge_sizes, edges, N
+ULL);[] 
+ []
+
+
+
+[75
+
+]
+
+[76
+
+]
+Overfull \hbox (6.0pt too wide) in paragraph at lines 2456--2456
+[]\OT1/pcr/m/n/10 /* newhg is now a copy of h but having only 4 of the edges of
+ h */[] 
+ []
+
+
+
+[77
+
+]
+
+[78
+
+]
+Overfull \hbox (5.99983pt too wide) in paragraph at lines 2504--2504
+[]                                   \OT1/pcr/m/n/12 int         nverts);[] 
+ []
+
+
+
+[79
+
+]
+
+[80
+
+]
+
+[81
+
+]
+
+[82
+
+]
+
+[83
+
+]
+Overfull \hbox (5.99983pt too wide) in paragraph at lines 2722--2722
+[]                           \OT1/pcr/m/n/12 gst_scale_info_ptr  scinfo);[] 
+ []
+
+
+
+[84
+
+]
+
+[85
+
+]
+
+[86
+
+]
+
+[87
+
+]
+
+[88]
+
+[89
+
+]
+
+[90
+
+]
+
+[91
+
+]
+
+[92
+
+]
+
+[93]
+Underfull \hbox (badness 1997) in paragraph at lines 3130--3130
+[]\OT1/ptm/m/n/12 Hyperedge num-ber whose em-bed-ding should be
+ []
+
+
+
+[94
+
+]
+
+[95]
+
+[96
+
+]
+
+[97]
+
+[98
+
+]
+
+[99
+
+]
+Overfull \hbox (12.0pt too wide) in paragraph at lines 3344--3344
+[]\OT1/pcr/m/n/10 gst_get_dbl_property (hgprop, GST_PROP_HG_GENERATION_TIME, &g
+time);[] 
+ []
+
+
+Overfull \hbox (24.0pt too wide) in paragraph at lines 3351--3351
+[]\OT1/pcr/m/n/10 /* We can set our own property in the same list e.g. for late
+r use */[] 
+ []
+
+
+Overfull \hbox (36.0pt too wide) in paragraph at lines 3353--3353
+[]\OT1/pcr/m/n/10 gst_set_dbl_property (hgprop, GST_PROP_USER_TOTAL_TIME, gtime
+ + ptime);[] 
+ []
+
+
+
+[100
+
+]
+
+[101
+
+]
+
+[102
+
+]
+
+[103
+
+]
+
+[104
+
+]
+
+[105
+
+]
+
+[106
+
+]
+
+[107
+
+]
+
+[108
+
+]
+
+[109
+
+]
+
+[110
+
+]
+
+[111
+
+]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 3845.
+
+Overfull \hbox (57.33438pt too wide) in paragraph at lines 3845--3859
+[][] 
+ []
+
+
+
+[112]
+
+[113
+
+]
+Overfull \hbox (56.39981pt too wide) in paragraph at lines 3917--3917
+[]\OT1/pcr/m/n/12 gst_hg_ptr gst_get_solver_hypergraph (gst_solver_ptr  solver)
+; 
+ []
+
+
+
+[114
+
+]
+Overfull \hbox (41.99982pt too wide) in paragraph at lines 3939--3939
+[]\OT1/pcr/m/n/12 gst_param_ptr gst_get_solver_param (gst_solver_ptr  solver); 
+
+ []
+
+
+
+[115
+
+]
+
+[116
+
+]
+Overfull \hbox (18.0pt too wide) in paragraph at lines 4007--4007
+[]   \OT1/pcr/m/n/10 This code prints all feasible solutions ordered by their r
+ank. */[] 
+ []
+
+
+
+[117]
+Overfull \hbox (5.99983pt too wide) in paragraph at lines 4044--4044
+[]    \OT1/pcr/m/n/12 gst_get_solver_properties (gst_solver_ptr  solver);[] 
+ []
+
+
+
+[118
+
+]
+Overfull \hbox (20.90042pt too wide) in paragraph at lines 4087--4098
+[]\OT1/ptm/m/n/12 User-written call-back func-tions are passed the fol-low-ing 
+ar-gu-ments: The \OT1/pcr/m/n/12 wherefrom
+ []
+
+
+Overfull \hbox (4.9276pt too wide) in paragraph at lines 4087--4098
+\OT1/ptm/m/n/12 ar-gu-ment in-di-cates the lo-ca-tion within Geo-Steiner's in-t
+er-nal al-go-rithms from which
+ []
+
+
+
+[119
+
+]
+Overfull \hbox (2.12054pt too wide) in paragraph at lines 4124--4132
+[]\OT1/pcr/m/n/12 GST[]CALLBACK[]BB[]LP[]SOLVED\OT1/ptm/m/n/12 : In-voked each 
+time a node fin-ishes solv-
+ []
+
+
+Overfull \hbox (7.0415pt too wide) in paragraph at lines 4132--4135
+[]\OT1/pcr/m/n/12 GST[]CALLBACK[]BB[]NEW[]UPPER[]BOUND\OT1/ptm/m/n/12 : In-voke
+d when-ever an im-proved
+ []
+
+
+
+[120]
+Overfull \hbox (41.99982pt too wide) in paragraph at lines 4153--4153
+[]        \OT1/pcr/m/n/12 void              (*cb_func) (GST_BB_CALLBACK_ARGS),[
+] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 4162--4162
+[]\OT1/pcr/m/n/10 void my_callback (int wherefrom, gst_node_ptr node, void * cb
+_data) 
+ []
+
+
+
+[121
+
+]
+Overfull \hbox (5.99983pt too wide) in paragraph at lines 4182--4182
+[]\OT1/pcr/m/n/12 gst_solver_ptr gst_node_get_solver (gst_node_ptr node); 
+ []
+
+
+
+[122
+
+]
+
+[123
+
+]
+
+[124
+
+]
+
+[125
+
+]
+Overfull \hbox (5.99983pt too wide) in paragraph at lines 4312--4312
+[]\OT1/pcr/m/n/12 int gst_node_get_parent_node_index (gst_node_ptr node); 
+ []
+
+
+
+[126
+
+]
+
+[127
+
+]
+
+[128
+
+]
+Overfull \hbox (34.79982pt too wide) in paragraph at lines 4396--4396
+[]\OT1/pcr/m/n/12 int gst_node_get_node_branch_direction (gst_node_ptr node); 
+ []
+
+
+
+[129
+
+]
+
+[130
+
+]
+Overfull \hbox (27.59982pt too wide) in paragraph at lines 4452--4452
+[]\OT1/pcr/m/n/12 int gst_node_get_solution (gst_node_ptr node, double * x); 
+ []
+
+
+
+[131
+
+]
+Overfull \hbox (0.72838pt too wide) in paragraph at lines 4496--4498
+[]\OT1/ptm/m/n/12 A call-back node ac-ces-sor func-tion to get the cur-rent nod
+e's vec-tor of lower bounds. 
+ []
+
+
+
+[132
+
+]
+Overfull \hbox (1.02855pt too wide) in paragraph at lines 4544--4546
+[]\OT1/ptm/m/n/12 A call-back node ac-ces-sor func-tion to get the cur-rent nod
+e's vec-tor of up-per bounds. 
+ []
+
+
+
+[133
+
+]
+
+[134
+
+]
+Overfull \hbox (4.29382pt too wide) in paragraph at lines 4603--4608
+\OT1/ptm/m/n/12 Con-sult \OT1/pcr/m/n/12 geosteiner.h \OT1/ptm/m/n/12 for the d
+e-tailed struc-ture of \OT1/pcr/m/n/12 gst[]channel[]options\OT1/ptm/m/n/12 . 
+ []
+
+
+
+[135
+
+]
+
+[136
+
+]
+
+[137
+
+]
+
+[138
+
+]
+
+[139
+
+]
+
+[140
+
+]
+
+[141]
+
+[142
+
+]
+
+[143
+
+]
+
+[144
+
+]
+
+[145
+
+]
+Overfull \hbox (5.99983pt too wide) in paragraph at lines 4990--4990
+[]\OT1/pcr/m/n/12 gst_scale_info_ptr gst_create_scale_info (int* status); 
+ []
+
+
+
+[146
+
+]
+
+[147
+
+]
+
+[148
+
+]
+
+[149
+
+]
+
+[150
+
+]
+
+[151
+
+]
+
+[152
+
+]
+
+[153
+
+]
+
+[154
+
+])
+
+[155
+
+]
+Overfull \hbox (37.04948pt too wide) in paragraph at lines 865--865
+[] \OT1/pcr/m/n/10.95 (cat prelude.ps; rand_points 70 | rfst | plotfst -fgo) >r
+fsts.ps 
+ []
+
+
+Overfull \hbox (37.04948pt too wide) in paragraph at lines 866--866
+[] \OT1/pcr/m/n/10.95 (cat prelude.ps; rand_points 70 | efst | plotfst -fgo) >e
+fsts.ps[] 
+ []
+
+
+Overfull \hbox (37.04948pt too wide) in paragraph at lines 867--867
+[] \OT1/pcr/m/n/10.95 (cat prelude.ps; rand_points 70 | ufst | plotfst -fgo) >u
+fsts.ps[] 
+ []
+
+
+
+[156
+
+]
+Overfull \hbox (5.1568pt too wide) in paragraph at lines 882--885
+[]\OT1/ptm/m/n/12 An Eu-clidean Steiner min-i-mal tree for the \OT1/pcr/m/n/12 
+berlin52.tsp \OT1/ptm/m/n/12 in-stance from TSPLIB
+ []
+
+
+Overfull \hbox (11.13278pt too wide) in paragraph at lines 882--885
+\OT1/ptm/m/n/12 can be con-structed and dis-played as fol-lows (as-sum-ing that
+ the file \OT1/pcr/m/n/12 berlin52.tsp
+ []
+
+
+Overfull \hbox (17.33951pt too wide) in paragraph at lines 886--886
+[] \OT1/pcr/m/n/10.95 (cat prelude.ps; lib_points <berlin52.tsp | efst | bb) | 
+gv - 
+ []
+
+
+
+[157]
+Overfull \hbox (11.89891pt too wide) in paragraph at lines 929--945
+[][] 
+ []
+
+
+Underfull \vbox (badness 1931) has occurred while \output is active []
+
+
+
+[158]
+
+[159]
+
+[160]
+Underfull \hbox (badness 10000) in paragraph at lines 1014--1015
+\OT1/ptm/m/n/12 sets the ep-silon mul-ti-pli-ca-tion fac-tor to 64
+ []
+
+
+
+[161]
+Underfull \hbox (badness 10000) in paragraph at lines 1036--1037
+\OT1/ptm/m/n/12 dis-ables the gen-er-a-tion of cor-ner points
+ []
+
+
+
+[162]
+Underfull \hbox (badness 10000) in paragraph at lines 1059--1060
+\OT1/ptm/m/n/12 dis-ables the gen-er-a-tion of cor-ner points
+ []
+
+
+
+[163]
+Underfull \hbox (badness 2080) in paragraph at lines 1100--1101
+[]\OT1/ptm/m/n/12 Sets a CPU time limit (in sec-onds) of T. Ex-am-ple CPU
+ []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+[164]
+Underfull \hbox (badness 10000) in paragraph at lines 1150--1151
+
+ []
+
+
+
+[165]
+
+[166]
+
+[167]
+
+[168]
+Underfull \hbox (badness 10000) in paragraph at lines 1272--1273
+\OT1/ptm/m/n/12 sets the ep-silon mul-ti-pli-ca-tion fac-tor to 64
+ []
+
+
+
+[169]
+
+[170]
+
+[171]
+
+[172]
+
+[173]
+
+[174
+
+]
+Overfull \hbox (8.17918pt too wide) in paragraph at lines 1496--1497
+\OT1/ptm/m/n/12 Heuristic used in the Eu-clidean FST gen-er-a-tor: Smith-Lee-Li
+ebman or Zachariasen-
+ []
+
+
+
+[175]
+
+[176]
+
+[177]
+
+[178]
+Overfull \hbox (13.02873pt too wide) in paragraph at lines 1620--1621
+\OT1/ptm/m/n/12 when the in-stance is small (see pa-ram-e-ters \OT1/pcr/m/n/12 
+GST[]PARAM[]BACKTRACK[]MAX[]VERTS
+ []
+
+
+Overfull \hbox (3.89738pt too wide) in paragraph at lines 1620--1621
+\OT1/ptm/m/n/12 and \OT1/pcr/m/n/12 GST[]PARAM[]BACKTRACK[]MAX[]EDGES\OT1/ptm/m
+/n/12 ); fur-ther-more, it switches to branch-
+ []
+
+
+
+[179]
+
+[180]
+
+[181]
+
+[182]
+
+[183]
+
+[184]
+Overfull \hbox (0.23662pt too wide) in paragraph at lines 1919--1920
+\OT1/ptm/m/n/12 If en-abled, gen-er-ate vi-o-lated sub-tours in their orig-i-na
+l form --- be-fore any strength-
+ []
+
+
+Overfull \hbox (27.05693pt too wide) in paragraph at lines 1919--1920
+\OT1/ptm/m/n/12 en-ing is per-formed. (This is im-pl-citly en-abled if \OT1/pcr
+/m/n/12 GST[]PARAM[]STRENGTHEN[]REDUCE
+ []
+
+
+
+[185]
+
+[186]
+
+[187]
+
+[188]
+
+[189]
+
+[190]
+
+[191]
+
+[192] (./hgprops.tex)
+
+[193
+
+] (./solverprops.tex)
+
+[194
+
+] (./errors.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+
+[195
+
+]
+
+[196]
+Overfull \hbox (12.0pt too wide) in paragraph at lines 2253--2253
+[]    \OT1/pcr/m/n/10 <<Dec X-coord>> <<Dec Y-coord>> <<Hex X-coord>> <<Hex Y-c
+oord>>[] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 2260--2260
+[]    \OT1/pcr/m/n/10 <Decimal length of hyperedge/FST> <Hex length of hyperedg
+e/FST>[] 
+ []
+
+
+Overfull \hbox (30.0pt too wide) in paragraph at lines 2263--2263
+[]       \OT1/pcr/m/n/10 <<Dec X-coord>> <<Dec Y-coord>> <<Hex X-coord>> <<Hex 
+Y-coord>>[] 
+ []
+
+
+Overfull \hbox (36.0pt too wide) in paragraph at lines 2267--2267
+[]    \OT1/pcr/m/n/10 <FST status: 0 = never needed, 1 = maybe needed, 2 = alwa
+ys needed>[] 
+ []
+
+
+Overfull \hbox (30.0pt too wide) in paragraph at lines 2269--2269
+[]    \OT1/pcr/m/n/10 <Incompatible FST indices (1..M), on one line separated b
+y spaces>[] 
+ []
+
+
+Overfull \hbox (24.0pt too wide) in paragraph at lines 2271--2271
+[]    \OT1/pcr/m/n/10 <Conc. terminals indices (1..N), on one line separated by
+ spaces>[] 
+ []
+
+
+
+[197]
+Overfull \hbox (12.0pt too wide) in paragraph at lines 2300--2300
+[]    \OT1/pcr/m/n/10 <<Dec X-coord>> <<Dec Y-coord>> <<Hex X-coord>> <<Hex Y-c
+oord>>[] 
+ []
+
+
+Overfull \hbox (12.0pt too wide) in paragraph at lines 2306--2306
+[]    \OT1/pcr/m/n/10 <Decimal length of hyperedge/FST> <Hex length of hyperedg
+e/FST>[] 
+ []
+
+
+Overfull \hbox (30.0pt too wide) in paragraph at lines 2309--2309
+[]       \OT1/pcr/m/n/10 <<Dec X-coord>> <<Dec Y-coord>> <<Hex X-coord>> <<Hex 
+Y-coord>>[] 
+ []
+
+
+Overfull \hbox (36.0pt too wide) in paragraph at lines 2313--2313
+[]    \OT1/pcr/m/n/10 <FST status: 0 = never needed, 1 = maybe needed, 2 = alwa
+ys needed>[] 
+ []
+
+
+Overfull \hbox (30.0pt too wide) in paragraph at lines 2315--2315
+[]    \OT1/pcr/m/n/10 <Incompatible FST indices (1..M), on one line separated b
+y spaces>[] 
+ []
+
+
+
+[198]
+Overfull \hbox (6.20262pt too wide) in paragraph at lines 2342--2346
+[]\OT1/ptm/m/n/12 The \OT1/pcr/m/n/10 <Instance description (free text)> \OT1/p
+tm/m/n/12 and \OT1/pcr/m/n/10 <Machine description
+ []
+
+
+Overfull \hbox (32.73175pt too wide) in paragraph at lines 2359--2362
+[]\OT1/ptm/m/n/12 The hex-adec-i-mal fields shall be \OT1/ptm/m/it/12 scaled\OT
+1/ptm/m/n/12 . For ex-am-ple sup-pose that the \OT1/pcr/m/n/10 <Coordinate
+ []
+
+
+
+[199]
+Overfull \hbox (16.61557pt too wide) in paragraph at lines 2418--2420
+[]\OT1/ptm/m/n/12 The in-com-pat-i-ble in-for-ma-tion need not in-clude FSTs wh
+ich are ``never needed''. 
+ []
+
+
+
+[200]
+No file manual.ind.
+
+
+[201] (./manual.aux)
+ ***********
+LaTeX2e <2024-06-01> patch level 1
+L3 programming layer <2024-05-27>
+ ***********
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 1392 strings out of 473601
+ 24390 string characters out of 5732763
+ 1967905 words of memory out of 5000000
+ 24268 multiletter control sequences out of 15000+600000
+ 570843 words of font info for 69 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 72i,12n,79p,363b,376s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+Output written on manual.dvi (208 pages, 309516 bytes).

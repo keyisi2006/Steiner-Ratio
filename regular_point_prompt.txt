@@ -1,0 +1,62 @@
+A non-intersecting polygonal line in a 2D plane rotates clockwise, with each rotation step being 120 degrees. That is, assuming the points above are A_0, A_1, ..., A_n in sequence, then ∠A_i A_{i+1} A_{i+2} is 120 degrees, and the inclination angle of vector A_i A_{i+1} is -60*i degrees.
+
+Let a_k denote the distance between A_{k-1} and A_k. You can assume that A_0 is located at (0, 0), and the direction of A_0A_1 is along the positive x-axis, and a_1 = 1 (thus A_1 is located at (1, 0)). The polyline A_0-A_1-...-A_n forms the minimum Steiner tree for the n+1 points A_0,...,A_n. Specifically, the following conclusions hold:
+- (A) For any 0 <= u < s <= v <= n, d(A_u, A_v) >= a_s
+
+You may focus solely on this condition. Now, suppose I provide the values of a_2, a_3, and a_4 (note that a_1 = 1). Since the polyline cannot intersect with itself, under the following conditions, you can make the final point A_n trapped inside a polygon.
+- (B1) If for some 0 <= l < k, the **extension** of A_kA_{k+1} intersects the **polyline** A_lA_{l+1}...A_k, then A_n will be trapped inside polygon A_l...A_kA_l.
+- (B2) If for some 0 <= u < s <= v < n, distance from A_u to the **ray** A_vA_{v+1} is less than a_s, let H be the foot of the perpendicular from point A_u to ray A_vA_{v+1}, then A_n will be trapped inside polygon A_uA_{u+1}...A_vHA_u.
+
+Note that when using conditions of class (B2), you MUST ensure that the foot H lies on the ray A_vA_{v+1}.
+
+So, your task is: determine under what condition of a_2, a_3, a_4 will A_n be trapped in some polygon. Note that only a_2, ..., a_4 are fixed, but a_5, ... can be arbitrary (however they still need to satisfy the condition of minimum steiner tree). For the "trap condition", you can focus on the two above.
+
+You should strictly follow the steps below:
+1. First calculate the coordinates of A_1, A_2, ..., A_4, A_5, ...
+2. Pick some final "trap conditions" of class (B1) or (B2) as goals, namely bprop_1, bprop_2, ..., bprop_l, to eventually make A_n trapped inside a polygon.
+3. Pick some "Steiner tree minimality" conditions of class (A), namely aprop_1, aprop_2, ..., aprop_k, to prevent a_5, a_6, ... from violating bprop_1, ... bprop_l.
+4. Solve under what relationship of a_2, a_3, a_4, the following property holds:
+	- one of bprop_1, bprop_2, ..., bprop_l is true whenever a_5, a_6, ... satisfies all of aprop_1, aprop_2, ..., aprop_k.
+
+Note that the condtions you pick can, and even should, include later point like A_5, A_6 in it, or the condition will be too trivial. To bound the position of A_5, A_6, and later points, you should use the "Steiner tree minimality" conditions to control the upper bound of a_5, a_6. This is very important and you must do this step.
+A class-(A) condition with parameters (u, v, v) can always impose an upper bound on a_v.
+
+The condition you find shouldn't be too complicated. I require that the conditions you provide must be linear.
+
+In order to solve the condition of a_2, a_3, a_4 after choosing the aprop's and bprop's, I require you use Mathematica to solve it. More specifically, you must execute commands in Mathematica in a format similar to the following to solve the problem:
+- Reduce[ForAll[{a4, a5, ...}, a4 > 0 && a5 > 0 && <aprop1> && ... && <apropk>, <bprop1> || ... || <bpropl>] && a2 > 0 && a3 > 0 && a4 > 0, {a2, a3, a4}]
+The meaning is that: for all a4, a5, ... satisfying aprop_1, ..., aprop_k, one of bprop_1, ..., bprop_l must be true.
+
+I will provide a tool for you to call. Note that the result given by Mathematica may be complicated, and you can relax it into a linear condition.
+The time limit of the tool is set to 5 minutes, so the expression you write shouldn't contain complicated functions. It is best to avoid complex functions such as Abs, Sqrt with variables, or EuclideanDistance. Instead, use the simplest expressions possible.
+
+If you come up with a condition <cond>, you MUST check whether it satisfies the requirement. You should execute the command below to check it:
+- Reduce[!ForAll[{a4, a5, ...}, a4 > 0 && a5 > 0 && <aprop1> && ... && <apropk>, <bprop1> || ... || <bpropl>] && a2 > 0 && a3 > 0 && a4 > 0 && <cond>, {a2, a3, a4}]
+The result returned by Mathematica must be False to indicate that <cond> is valid. Note that there is a '!' before the 'ForAll'.
+
+When you calculate distance like |A_0A_5|, it may contain absolute values like |x(A_5)|. However, when the expression takes one particular sign, it typically indicates that two lines intersect, so in practice, only the other sign needs to be considered. You must carefully distinguish between them and remove the absolute value.
+You should not be constrained by the final goal selected. For instance, if the ultimate goal is for the extension of A_6A_7 to intersect the polyline A_0A_1A_2, but sometimes A_5A_6 already intersects A_0A_1 earlier, this can still be considered achieving the objective, as the trapped area is typically smaller.
+
+And finally, in order to prevent the condition you find from being too trivial, it should cover the following box:
+- a_2 ∈ [3.92090, 3.96777]
+- a_3 ∈ [5.92041, 5.97290]
+- a_4 ∈ [0.00000, 0.03711]
+
+Note that you should give a **general** condition of a_2, a_3, a_4. It should not be a special condition for this particular box, but rather a general condition covering a larger area.
+
+The following is extremely important. The following is the thing that you shouldn't do:
+- You should NOT directly use the previously given box as the condition. No, this is not allowed. You need to find a general condition, rather than one tailored to the specific box. The box is given only as a requirement: every point in the box should satisfy your condition.
+- You should NOT include extremely restrictive conditions such as 0.9 ≤ a_2 ≤ 1.1.
+- You should NOT explicitly calculate the upper bounds of a_5, a_6 by hand.
+
+The following is the thing you should do:
+1. Pick some "trap condition", namely bprop_1, ..., bprop_l.
+2. Pick some "Steiner tree minimality" condition, namely aprop_1, ..., aprop_k.
+3. Solve the constraint on a_2, a_3, a_4: for every (a_5, a_6, ...), aprop_1, ..., aprop_k all being true implies that at least one of bprop_1, ..., bprop_l is true. IMPORTANTLY, do remember to use the tool Mathematica to solve this problem.
+4. If the condition returned by Mathematica is complicated, either choose some other "trap condition" or "Steiner tree minimality" condition and do the previous steps again, or relax the conditon to make it into a linear one. Make sure that the condition obtained is linear.
+5. Check whether every point in the given box satisfies your condition. If not, change the "Steiner tree minimality" conditions or "trap conditions" you have picked and repeat the previous steps again.
+
+You should think hard and make sure all the steps are rigorous. After you have figured out the condition, you should verify that it is linear, and you should verify that every point in the previously given box satisfies your condition. At the end, you should implement one function in C++ codes:
+- bool X_cond(double a2, double a3, double a4): given the value of a_2, a_3, a_4, it should return whether (a_2, a_3, a_4) satisfy the condition you found.
+
+This function in the code should be placed in the outermost scope. The entire code block must be enclosed within ```.

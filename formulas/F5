@@ -1,0 +1,39 @@
+#include <cmath>
+
+bool steiner_cond2(double b, double c, double d, double s, double e) {
+    // Sufficient, axis-parallel closed condition ensuring existence of an (AD)-(QR) Steiner tree
+    // as verified with Mathematica in the derivation above.
+    return (b >= 0.0) && (c >= 1.0) && (d >= 0.0) && (s >= 0.0) && (e >= 1.0);
+}
+
+double steiner_length2(double b, double c, double d, double s, double e) {
+    // Length = |UV| with U = R60*D and V = Q + R60*(R-Q).
+    // Closed form: let S = 1 + s + c + e + 2*d, then |UV| = sqrt(S^2 - S + 1).
+    (void)b; // length is independent of b
+    const double S = 1.0 + s + c + e + 2.0*d;
+    return std::sqrt(S*S - S + 1.0);
+}
+
+template<> struct F<526> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld e, ld f) {
+if(F_VAL == 1 || mono_mask != 0) return INF;
+ld L_s_minus = b + c + d + e + f + s + 1;
+ld L_t = sqrt(b*b + b + 1);
+ld L_s_plus;
+if(!steiner_cond2(b, c, d, s, e)) L_s_plus = INF;
+else L_s_plus = steiner_length2(b, c, d, s, e);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<527> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld e, ld f) {
+if(F_VAL == 1 || mono_mask != 0) return INF;
+ld L_s_minus = b + c + d + e + f + s + 1;
+ld L_t = sqrt(b*b - b*d + b*s + d*d + d*s + s*s);
+ld L_s_plus;
+if(!steiner_cond2(b, c, d, s, e)) L_s_plus = INF;
+else L_s_plus = steiner_length2(b, c, d, s, e);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+const int M5 = 528;

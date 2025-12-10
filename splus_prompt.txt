@@ -1,0 +1,88 @@
+Given the following points in a two-dimensional plane: A, X, Y, B, D, P, Q, R, determine their positions as follows:
+- A is located at (0,0)
+- Vector AX has an inclination angle of 0 and length of 1
+- Vector XB has an inclination angle of 60 and length of b
+- Vector XY has an inclination angle of -60 and length of s
+- Vector YD has an inclination angle of 0 and length of d
+- Vector YP has an inclination angle of -120 and length of c
+- Vector PQ has an inclination angle of -60 degrees and a length of d;
+- Vector PR has an inclination angle of 180 degrees and a length of e.
+
+Your task involves calculating the length of the minimum Steiner tree connecting four points. I will give you some background knowledge.
+Suppose points A, B, C, and D form a **convex** quadrilateral and are arranged in **clockwise order**. Define the (AB)-(CD) type Steiner tree for points A, B, C, and D as follows:
+
+- The Steiner tree consists of two Steiner points, S and T, and contains five edges: AS, BS, ST, CT, and DT. The three edges surrounding S and T each form a 120-degree angle with the other two edges.
+
+Next are the key points: the existence conditions for (AB)-(CD) type Steiner tree for points A, B, C, and D.
+Let U denote the position of point B after segment AB is rotated counterclockwise 60 degrees about point A. Thus, A, B, and U are arranged in a counterclockwise order and form an equilateral triangle.
+Similarly, let V denote the position of point D after segment CD is rotated counterclockwise 60 degrees about point C. Thus, C, D, and V are arranged in a counterclockwise order and form an equilateral triangle.
+For an (AB)-(CD) type Steiner tree to exist, the following conditions must be satisfied:
+1. A, B, C, D must form a convex quadrilateral.
+2. The four angles ∠UCD, ∠UDC, ∠VAB, and ∠VBA are all less than or equal to 120 degrees.
+3. Let O be the intersection point of line segments AC and BD. ∠AOB must be less than or equal to 120 degrees. In other words, the angle between vectors AC and BD must be less than or equal to 120 degrees.
+
+The condition for "convex quadrilateral" can be formulated as follows: For any three adjacent points x, y, z (in clockwise order), the cross product of vectors xy and yz is less than or equal to zero.
+The condition that the angle between vectors u and v is less than or equal to 120 degrees can be expressed using the cosine rule or the dot product of vectors, namely: vectors u and v form an angle less than or equal to 120 degrees if and only if 2 * dot(u, v) + (|u|*|v|) >= 0
+If necessary, the third constraint above may be relaxed to: the angle between vectors AC and BD is less than or equal to 90. In this case, the condition can be expressed as dot(AC, BD) >= 0.
+
+If an (AB)-(CD) type Steiner tree exists, then its length is precisely the distance from U to V, i.e., |UV|, where U and V are defined as above.
+
+When applying the above conditions, you must be extremely careful about how U and V are constructed. U is obtained by rotating B counterclockwise by 60 degrees around point A, and V is obtained by rotating D counterclockwise by 60 degrees around C.
+
+Now you need to focus on the minimum Steiner tree connecting points A, D, Q, R of type (AD)-(QR).
+
+You should strictly follow the steps below:
+1. Calculate the expressions of the existence conditions of this particular type of Steiner tree (AD)-(QR).
+2. Use Mathematica to solve under what constraint the existence conditions hold true. For each existence condition <cond>, you can execute the following command in Mathematica to reduce it:
+	- Reduce[<cond> && b>=0 && c>=0 && d>=0 && s>=0 && e>=0, {b, c, d, s, e}]
+3. The result may be rather complex, so you'll need to apply some heuristic relaxation to simplify it.
+4. Calculate the length of the Steiner tree when it exists, expressed in terms of b, c, d, s, e.
+
+I will provide a tool for you to call. The time limit of the tool is set to 5 minutes, so the expression you write shouldn't contain complicated functions. Do not place all conditions within a single function call; instead, split them into multiple calls. Otherwise, you risk exceeding the timeout limit.
+Note that all calls are independent; each call does not inherit anything from previous calls. Therefore, variables that need to be reused must be redefined in each call.
+Once again, do NOT attempt to inherit any variables or functions from previous calls. You should define everything afresh in every call.
+
+Further more, I want the condition P(b, c, d, e, s) you found satisfy the following "Axis-parallel Segment Closure" property:
+- for every line segment AB that is parallel to one of the axis, P(A) and P(B) is true implies that for every point C on AB, P(C) is true.
+This way, when I want to check whether every point in a box satisfies P, I only need to check whether every corner point of the box satisfies it.
+
+If you write the third constraint as dot(AC, BD) >= 0, this is already a quadratic inequality, so it is very likely to satisfy the "Axis-parallel Segment Closure" property. You don't need to use Mathematica to reduce it; you can directly examine whether it satisfies this property.
+
+When you want to examine whether a condition satisfies the "Axis-parallel Segment Closure" property, you can always write a python code and run an experiment first. However, after numerical verification, you had better rigorously prove it.
+
+This "Axis-parallel Segment Closure" property is the goal of your relaxation. Once the condition P(b, c, d, s, e) satisfies this property, you need not continue simplifying.
+Finally, if you come up with a condition P, you MUST check whether it satisfies the requirement. For each constraint <cond> in the existence condition, you should execute the command below to check it:
+- Reduce[!<cond> && P(b, c, d, e, s) && b>=0 && c>=0 && d>=0 && s>=0 && e>=0, {b, c, d, s, e}]
+The result returned by Mathematica must be False to indicate that P is valid. Note that there is a '!' before the <cond>.
+
+If Mathematica times out, you can select a subset of the conditions in P or use variable substitutions to reduce the number of variables. For example, if c and s always appear in the form c + s, you can set t = c + s. This allows you to eliminate the variables c and s and introduce only the variable t.
+Typically, reducing the number of variables can speed up execution. However, you absolutely cannot eliminate variables by setting them to certain special values.
+
+And at last, in order to prevent the condition you find from being too trivial, it should cover the following box:
+b ∈ [1.41122, 1.41193]
+c ∈ [1.18439, 1.18756]
+d ∈ [0.41122, 0.41214]
+s ∈ [0.99979, 1.00034]
+e ∈ [0.18320 0.18958]
+
+Note that you should give a **general** condition of b, c, d, s, e. It should not be a special condition for this particular box, but rather a general condition covering a larger area.
+
+The followings are the thing that you shouldn't do:
+- You should NOT directly use the previously given box as the condition. No, this is not allowed. You need to find a general condition, rather than one tailored to the specific box. The box is given only as a requirement: every point in the box should satisfy your condition.
+- You should NOT include extremely restrictive conditions such as 0.9 ≤ a_2 ≤ 1.1.
+- You need NOT consider other types of Steiner trees. You only need to focus on the type (AD)-(QR).
+- You need NOT ensure that this Steiner tree is minimum. You only need to ensure that such type of Steiner tree exists.
+
+The followings are the things you should remember:
+- You do NOT need to obtain the exact condition; instead, you can make some reasonable relaxation. Conditions like "c>=1" or "c>=b" are entirely acceptable.
+- You should keep in mind that the constraints of the existence condition are satisfied most of the time and only fail in pathological cases or regions far away from what I care about, especially the first two constraints.
+Here, you can consider the area I care about to be the region surrounding the box given earlier. So for the first two constraints, you can usually use some simple conditions to satisfy them.
+
+Do remember that your task is to obtain a condition where the Steiner tree connecting points A, D, Q, R of type (AD)-(QR) exists. Then calculate the length of this Steiner tree when it exists.
+Do remember to make sure that all three kind of constraints are satisfied. After you have figured out the condition, you should verify that it satisfies the "Axis-parallel Segment Closure" property, and you should verify that every point in the previously given box satisfies your condition.
+
+At the end, you should implement two function in C++ codes:
+- bool steiner_cond(double b, double c, double d, double s, double e): given the value of b, c, d, s, e, it should return whether it satisfies the condition you found.
+- double steiner_length(double b, double c, double d, double s, double e): given the value of b, c, d, s, e, it should return the length of the Steiner tree when it exists (you can assume that cond(b, c, d, s, e) is true when this function is called).
+
+This function in the code should be placed in the outermost scope. The entire code block must be enclosed within ```.

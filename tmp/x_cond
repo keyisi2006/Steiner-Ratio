@@ -1,0 +1,15 @@
+#include <cmath>
+
+bool X_cond(double a2, double a3, double a4) {
+    return a4 < a2 + 1;
+}
+
+double AX_upper_bound(double a2, double a3, double a4) {
+    double d2 = std::sqrt(1.0 + a2 + a2 * a2);
+    double d3 = std::sqrt(1.0 + a2 + a2 * a2 - a3 + a2 * a3 + a3 * a3);
+    double d4 = std::sqrt(a2 * a2 + a3 * a3
+                          + a2 * (1.0 + a3 - a4)
+                          + a3 * (-1.0 + a4)
+                          + ( -1.0 + a4) * ( -1.0 + a4));
+    return std::max({d2, d3, d4, a3 + a4 - 1});
+}
