@@ -103,6 +103,19 @@ struct Split
 			format_tuples(S_minus), format_strings(S_plus), format_tuples(T_star)
 		);
 	}
+	str splus_to_string() const
+	{
+		auto format_strings = [](auto &&r) {
+			str ret;
+			for(auto s : r)
+			{
+				if(!ret.empty()) ret += ", ";
+				ret += "'" + s + "'";
+			}
+			return ret;
+		};
+		return format("({})", format_strings(S_plus));
+	}
 	auto operator<=>(const Split &other) const = default;
 };
 struct Point
@@ -166,9 +179,9 @@ double angle(Point a, Point b)
 	return acos((a * b) / (sqrt(a.norm2() * b.norm2()))) / numbers::pi * 180;
 }
 
-int main()
+int main(int argc, char **argv)
 {
-	str file_name = "splits.txt";
+	str file_name = "splits4.txt";
 	ifstream fin(file_name);
 	string line;
 	vector<Split> splits;
@@ -180,9 +193,26 @@ int main()
 		puts("Fail");
 		return 0;
 	}
-	ld a = 1, b, c, d, s, e, f;
-	cin>>b>>c>>d>>s>>e;
+	ld a = 1, b, c, d, s, e, f, tmp;
+	ld lower_b, upper_b;
+	ld lower_c, upper_c;
+	ld lower_d, upper_d;
+	ld lower_s, upper_s;
+	ld lower_e, upper_e;
+	ifstream param(argv[1]);
+	param >> tmp >> tmp;
+	param >> lower_b >> upper_b;
+	param >> lower_c >> upper_c;
+	param >> lower_d >> upper_d;
+	param >> lower_s >> upper_s;
+	param >> lower_e >> upper_e;
+	b = (lower_b + upper_b) / 2;
+	c = (lower_c + upper_c) / 2;
+	d = (lower_d + upper_d) / 2;
+	s = (lower_s + upper_s) / 2;
+	e = (lower_e + upper_e) / 2;
 	f = d;
+	cerr << b << " " << c << " " << d << " " << s << " " << e << " " << f << endl;
 	Point dir1 = Point(1, 0), dir2 = dir1.rotate_ccw_60(), dir3 = dir1.rotate_cw_60();
 	pos["A"] = Point(0, 0);
 	pos["s"] = pos["A"] + dir1 * a;
@@ -194,7 +224,7 @@ int main()
 	pos["R"] = pos["P"] + dir1 * (-e);
 
 	dist2_upper_bound[{"A", "X"}] = max(max(max(dist2("A", "P"), dist2("A", "R")), dist2("A", "r")), e + c - 1);
-	dist2_upper_bound[{"D", "X"}] = INF; // max(dist2("D", "P"), dist2("D", "R"));
+	dist2_upper_bound[{"D", "X"}] = max(dist2("D", "P"), dist2("D", "R"));
 	dist2_upper_bound[{"D", "Y"}] = max(dist2("D", "P"), dist2("D", "Q"));
 	ld rho = 0;
 
@@ -204,6 +234,7 @@ int main()
 	// valid["X"] = false;
 	valid["Y"] = false;
 
+	str best_splus;
 	for(auto &&split : splits)
 	{
 		if(!split.is_valid(valid)) continue;
@@ -213,9 +244,15 @@ int main()
 		ld L_s_plus = L_s(split.S_plus);
 		ld r = (L_s_minus - L_s_plus) / L_t;
 		cout<<split.to_string()<<": "<<r<<endl;
-		rho = max(rho, r);
+		// rho = max(rho, r);
+		if(r > rho) {
+			rho = r;
+			best_splus = split.splus_to_string();
+		}
 	}
-	cout<<rho<<endl;
+	ofstream fout("tmp/s_plus");
+	fout << best_splus << endl;
+	cout << "rho = " << rho << endl;
 	gst_close_geosteiner();
 	return 0;
 }

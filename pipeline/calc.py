@@ -2,7 +2,7 @@ from typing import Dict, List, Tuple
 from sympy import Symbol, expand, sqrt
 import sympy
 import re
-import os, argparse
+import os, argparse, sys
 
 class Split:
 
@@ -381,107 +381,110 @@ if __name__ == '__main__':
                 break
 
     file_id += 1
-    f = open(os.path.join(dir, f'F{file_id}'), 'w', encoding='utf-8')
-    def print(s):
-        f.write(s)
-        f.write('\n')
+    with open(os.path.join(dir, f'F{file_id}'), 'w', encoding='utf-8') as f:
+    
+        # S_plus with size 4
+        if args.splus:
+            
+            with open('tmp/s_cond', 'r', encoding='utf-8') as ff:
+                s_cond = ff.read()
+            with open('tmp/s_plus', 'r', encoding='utf-8') as ff:
+                s_plus = set(eval(ff.read()))
 
-    # S_plus with size 4
-    if args.splus:
-
-        with open('tmp/s_cond', 'r', encoding='utf-8') as ff:
-            s_cond = ff.read()
-        with open('tmp/s_plus', 'r', encoding='utf-8') as ff:
-            s_plus = set(eval(ff.read()))
-        print(f"""\
+            f.write(f"""\
 namespace __f{file_id}_detail {{
 {s_cond}
-}}
-""")
+}}""")
+            f.write('\n')
 
-        for i in range(len(splits)):
-            split = splits[i]
-            if set(split.S_plus) != s_plus:
-                continue
-            exist_X = False
-            exist_Y = False
-            for (u, v) in split.T_star:
-                if u == 'X' or v == 'X':
-                    exist_X = True
-            for (u, v) in split.T_star:
-                if u == 'Y' or v == 'Y':
-                    exist_Y = True
-            if exist_X or exist_Y:
-                continue
-            codes = induction_cond(split, f"""\
+            for i in range(len(splits)):
+                split = splits[i]
+                if set(split.S_plus) != s_plus:
+                    continue
+                exist_X = False
+                exist_Y = False
+                for (u, v) in split.T_star:
+                    if u == 'X' or v == 'X':
+                        exist_X = True
+                for (u, v) in split.T_star:
+                    if u == 'Y' or v == 'Y':
+                        exist_Y = True
+                if exist_X or exist_Y:
+                    continue
+                codes = induction_cond(split, f"""\
 ld L_s_plus;
 if(!__f{file_id}_detail::steiner_cond(b, c, d, s, e)) L_s_plus = INF;
 else L_s_plus = __f{file_id}_detail::steiner_length(b, c, d, s, e);""")
-            codes.insert(0, f"""\
+                codes.insert(0, f"""\
 template<> struct F<{id}> {{
 ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld e, ld f) {{
 if(F_VAL == 1 || mono_mask != 0) return INF;""")
-            codes.append('}};\n')
-            id += 1
+                codes.append('}};\n')
+                id += 1
 
-            print('\n'.join(codes))
+                f.write('\n'.join(codes))
+                f.write('\n')
 
-    # regular point
-    elif args.regular_point:
+        # regular point
+        elif args.regular_point:
 
-        with open('tmp/x_cond', 'r', encoding='utf-8') as ff:
-            X_cond = ff.read()
-        print(f"""\
+            with open('tmp/x_cond', 'r', encoding='utf-8') as ff:
+                X_cond = ff.read()
+            f.write(f"""\
 namespace __f{file_id}_detail {{
 {X_cond}
-}}
-""")
+}}""")
+            f.write('\n')
 
-        for i in range(len(splits)):
-            split = splits[i]
-            if len(split.S_plus) > 3:
-                continue
+            for i in range(len(splits)):
+                split = splits[i]
+                if len(split.S_plus) > 3:
+                    continue
 
-            mono_mask = 0
-            for j, var in enumerate(vars):
-                if check_mono(split, var):
-                    mono_mask += 1<<j
+                mono_mask = 0
+                for j, var in enumerate(vars):
+                    if check_mono(split, var):
+                        mono_mask += 1<<j
 
-            exist_X = False
-            exist_Y = False
-            for (u, v) in split.T_star:
-                if u == 'X' or v == 'X':
-                    exist_X = True
-            for (u, v) in split.T_star:
-                if u == 'Y' or v == 'Y':
-                    exist_Y = True
-            cond = None
-            if exist_X:
-                conde = f'__f{file_id}_detail::X_cond(s,c,e)'
-                if cond:
-                    cond = f'{cond} & {conde}'
-                else:
-                    cond = conde
-                dist2_upper_bound[('A', 'X')] = Expr('A_X')**2
-                dist2_upper_bound[('D', 'X')] = Expr('1e18')
-            if exist_Y:
-                condf = '(F_VAL == 1 ? true : false)'
-                if cond:
-                    cond = f'{cond} & {condf}'
-                else:
-                    cond = condf
-                dist2_upper_bound[('D', 'Y')] = Max(dist2('D', 'P'), dist2('D', 'Q'))
-            if cond is None:
-                cond = 'true'
-            codes = induction_cond(split)
-            codes.insert(0, f"""\
+                exist_X = False
+                exist_Y = False
+                for (u, v) in split.T_star:
+                    if u == 'X' or v == 'X':
+                        exist_X = True
+                for (u, v) in split.T_star:
+                    if u == 'Y' or v == 'Y':
+                        exist_Y = True
+                cond = None
+                if exist_X:
+                    conde = f'__f{file_id}_detail::X_cond(s,c,e)'
+                    if cond:
+                        cond = f'{cond} & {conde}'
+                    else:
+                        cond = conde
+                    dist2_upper_bound[('A', 'X')] = Expr('A_X')**2
+                    dist2_upper_bound[('D', 'X')] = Expr('D_X')**2
+                if exist_Y:
+                    condf = '(F_VAL == 1 ? true : false)'
+                    if cond:
+                        cond = f'{cond} & {condf}'
+                    else:
+                        cond = condf
+                    dist2_upper_bound[('D', 'Y')] = Max(dist2('D', 'P'), dist2('D', 'Q'))
+                if cond is None:
+                    cond = 'true'
+                codes = induction_cond(split)
+                codes.insert(0, f"""\
 template<> struct F<{id}> {{
 ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld e, ld f) {{
 if(!({cond}) || (mono_mask | {mono_mask}) != {mono_mask}) return INF;
-ld A_X = __f{file_id}_detail::AX_upper_bound(s, c, e);""")
-            codes.append('}};\n')
-            id += 1
+ld A_X = __f{file_id}_detail::AX_upper_bound(s, c, e);
+ld D_X = __f{file_id}_detail::DX_upper_bound(s, c, e, d);
+""")
+                codes.append('}};\n')
+                id += 1
 
-            print('\n'.join(codes))
+                f.write('\n'.join(codes))
+                f.write('\n')
 
-    print(f'const int M{file_id} = {id};\n')
+        f.write(f'const int M{file_id} = {id};')
+        f.write('\n')

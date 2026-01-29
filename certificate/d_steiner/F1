@@ -1,0 +1,2595 @@
+namespace __f1_detail {
+bool X_cond(double a2, double a3, double a4) {
+    const double c = std::sqrt(3.0) / 2.0;
+    // Linear trap conditions:
+    // a4 ≤ 1 - a3 + (2/√3) a2
+    double rhs = 1.0 - a3 + (2.0 / std::sqrt(3.0)) * a2;
+    if (a4 > rhs) return false;
+    // a3 + a4 ≥ 1
+    if (a3 + a4 < 1.0) return false;
+    // Foot-on-ray (redundant but kept explicit): 1 + 2*a2 + a3 - a4 ≥ 0
+    if (1.0 + 2.0*a2 + a3 - a4 < 0.0) return false;
+    return true;
+}
+
+double AX_upper_bound(double a2, double a3, double a4) {
+    const double c = std::sqrt(3.0) / 2.0;
+
+    // Distances from A0 to vertices of polygon A0-A1-A2-A3-A4-H-A0
+    double d1 = 1.0;
+    double d2 = std::sqrt(1.0 + a2 + a2*a2);
+    double d3 = std::sqrt(1.0 + a2 + a2*a2 - a3 + a2*a3 + a3*a3);
+    double d4 = std::sqrt(
+        a2*a2 + a3*a3 +
+        a2*(1.0 + a3 - a4) +
+        a3*(-1.0 + a4) +
+        ( -1.0 + a4 )*( -1.0 + a4 )
+    );
+    // With cond enforcing a3 + a4 ≥ 1, |A0H| is:
+    double dH = c * (a3 + a4 - 1.0);
+
+    return std::max({d1, d2, d3, d4, dH});
+}
+
+}
+
+template<> struct F<623> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + s + 1;
+ld L_t = A_X;
+ld L_s_plus = sqrt(b*b + b*s + s*s);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<624> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + s + t + u + 1;
+ld L_t = A_X;
+ld L_s_plus;
+ld AB2 = b*b + b*s - b*t + s*s + s*t + t*t;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*t + s*t + s*u + t*u <= 0) 
+L_s_plus = sqrt(b*b + b*s - 2*b*t + b*u + s*s - s*t - s*u + t*t - t*u + u*u);
+else 
+L_s_plus = sqrt(b*b + b*s + b*t + b*u + s*s + 2*s*t + 2*s*u + t*t + 2*t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<625> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + e + s + 1;
+ld L_t = A_X;
+ld L_s_plus;
+ld AB2 = b*b + b*s + s*s;
+ld BC2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + s*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + b*u + e*e - 2*e*s + e*u + s*s - s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + b*u + e*e + e*s + e*u + s*s + 2*s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<626> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + f + s + 1;
+ld L_t = A_X;
+ld L_s_plus;
+ld AB2 = b*b + b*s + s*s;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = f*f + f*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(-b*f + s*u <= 0) 
+L_s_plus = sqrt(b*b + 2*b*f + b*s + b*u + f*f + f*s + f*u + s*s - s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*f + b*s + b*u + f*f + f*s + f*u + s*s + 2*s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<627> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1);
+ld L_s_plus = sqrt(t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<628> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<629> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<630> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld CA2 = c*c + c*d + d*d;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*d + c*t + d*t + d*u <= 0) 
+L_s_plus = sqrt(c*c - c*d - c*t + c*u + d*d - d*t - 2*d*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*d + 2*c*t + c*u + d*d + 2*d*t + d*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<631> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld CA2 = c*c + c*d + d*d;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*d + c*t + d*t + d*u <= 0) 
+L_s_plus = sqrt(c*c - c*d - c*t + c*u + d*d - d*t - 2*d*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*d + 2*c*t + c*u + d*d + 2*d*t + d*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<632> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld CA2 = c*c + c*d + d*d;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*d + c*t + d*t + d*u <= 0) 
+L_s_plus = sqrt(c*c - c*d - c*t + c*u + d*d - d*t - 2*d*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*d + 2*c*t + c*u + d*d + 2*d*t + d*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<633> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1);
+ld L_s_plus;
+ld AB2 = f*f - f*t + f*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<634> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = f*f - f*t + f*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<635> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = f*f - f*t + f*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<636> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1);
+ld L_s_plus;
+ld AB2 = e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<637> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<638> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<639> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld BC2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld CA2 = b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*d + b*t + d*u + s*t + s*u + t*u <= 0) 
+L_s_plus = sqrt(b*b - b*d + b*s - 2*b*t + b*u + d*d + d*s + d*t - 2*d*u + s*s - s*t - s*u + t*t - t*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*d + b*s + b*t + b*u + d*d + d*s + d*t + d*u + s*s + 2*s*t + 2*s*u + t*t + 2*t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<640> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld BC2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld CA2 = b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*d + b*t + d*u + s*t + s*u + t*u <= 0) 
+L_s_plus = sqrt(b*b - b*d + b*s - 2*b*t + b*u + d*d + d*s + d*t - 2*d*u + s*s - s*t - s*u + t*t - t*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*d + b*s + b*t + b*u + d*d + d*s + d*t + d*u + s*s + 2*s*t + 2*s*u + t*t + 2*t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<641> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d);
+ld L_s_plus;
+ld AB2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld BC2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld CA2 = b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*d + b*t + d*u + s*t + s*u + t*u <= 0) 
+L_s_plus = sqrt(b*b - b*d + b*s - 2*b*t + b*u + d*d + d*s + d*t - 2*d*u + s*s - s*t - s*u + t*t - t*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*d + b*s + b*t + b*u + d*d + d*s + d*t + d*u + s*s + 2*s*t + 2*s*u + t*t + 2*t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<642> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(d*d + d*t - d*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<643> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(d*d + d*t - d*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<644> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(d*d + d*t - d*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<645> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(d*d + d*t - d*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<646> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(d*d + d*t - d*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<647> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d);
+ld L_s_plus = sqrt(d*d + d*t - d*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<648> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(d*d + d*t - d*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<649> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(d*d + d*t - d*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<650> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<651> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<652> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<653> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<654> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<655> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d);
+ld L_s_plus;
+ld AB2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<656> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<657> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = d*d + d*t - d*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d - d*f + d*t - d*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<658> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = d*d + d*e + d*t - d*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(d*e - e*f - e*u - f*t - f*u <= 0) 
+L_s_plus = sqrt(d*d - d*e - d*f + d*t - d*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d + 2*d*e - d*f + d*t - d*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<659> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = d*d + d*e + d*t - d*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(d*e - e*f - e*u - f*t - f*u <= 0) 
+L_s_plus = sqrt(d*d - d*e - d*f + d*t - d*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d + 2*d*e - d*f + d*t - d*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<660> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = d*d + d*e + d*t - d*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(d*e - e*f - e*u - f*t - f*u <= 0) 
+L_s_plus = sqrt(d*d - d*e - d*f + d*t - d*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d + 2*d*e - d*f + d*t - d*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<661> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = d*d + d*e + d*t - d*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(d*e - e*f - e*u - f*t - f*u <= 0) 
+L_s_plus = sqrt(d*d - d*e - d*f + d*t - d*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d + 2*d*e - d*f + d*t - d*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<662> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = d*d + d*e + d*t - d*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(d*e - e*f - e*u - f*t - f*u <= 0) 
+L_s_plus = sqrt(d*d - d*e - d*f + d*t - d*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d + 2*d*e - d*f + d*t - d*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<663> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d);
+ld L_s_plus;
+ld AB2 = d*d + d*e + d*t - d*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(d*e - e*f - e*u - f*t - f*u <= 0) 
+L_s_plus = sqrt(d*d - d*e - d*f + d*t - d*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d + 2*d*e - d*f + d*t - d*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<664> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = d*d + d*e + d*t - d*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(d*e - e*f - e*u - f*t - f*u <= 0) 
+L_s_plus = sqrt(d*d - d*e - d*f + d*t - d*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d + 2*d*e - d*f + d*t - d*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<665> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = d*d + d*e + d*t - d*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(d*e - e*f - e*u - f*t - f*u <= 0) 
+L_s_plus = sqrt(d*d - d*e - d*f + d*t - d*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(d*d + 2*d*e - d*f + d*t - d*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<666> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b - b*c + b*s + b*t + b*u + c*c + c*s + c*t + c*u + s*s + 2*s*t + 2*s*u + t*t + 2*t*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*c + b*s - 2*b*t + b*u + c*c - 2*c*s + c*t + c*u + s*s - s*t - s*u + t*t - t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<667> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b - b*c + b*s + b*t + b*u + c*c + c*s + c*t + c*u + s*s + 2*s*t + 2*s*u + t*t + 2*t*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*c + b*s - 2*b*t + b*u + c*c - 2*c*s + c*t + c*u + s*s - s*t - s*u + t*t - t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<668> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b - b*c + b*s + b*t + b*u + c*c + c*s + c*t + c*u + s*s + 2*s*t + 2*s*u + t*t + 2*t*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*c + b*s - 2*b*t + b*u + c*c - 2*c*s + c*t + c*u + s*s - s*t - s*u + t*t - t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<669> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b - b*c + b*s + b*t + b*u + c*c + c*s + c*t + c*u + s*s + 2*s*t + 2*s*u + t*t + 2*t*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*c + b*s - 2*b*t + b*u + c*c - 2*c*s + c*t + c*u + s*s - s*t - s*u + t*t - t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<670> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<671> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<672> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<673> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<674> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<675> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d);
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<676> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<677> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<678> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<679> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<680> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(c*c + c*t + 2*c*u + t*t + t*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<681> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<682> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<683> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<684> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<685> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<686> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<687> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<688> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<689> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<690> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<691> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = c*c + c*t + 2*c*u + t*t + t*u + u*u;
+ld BC2 = f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*f + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*f + c*t + 2*c*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*f + c*t + 2*c*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<692> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<693> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<694> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<695> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<696> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<697> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d);
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<698> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<699> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<700> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<701> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<702> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = c*c + c*e + c*t + 2*c*u + e*e + 2*e*t + e*u + t*t + t*u + u*u;
+ld BC2 = e*e + e*f + f*f;
+ld CA2 = c*c + c*f + c*t + 2*c*u + f*f - f*t + f*u + t*t + t*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(c*e + c*f + e*f + e*u + f*t + f*u <= 0) 
+L_s_plus = sqrt(c*c - c*e - c*f + c*t + 2*c*u + e*e - e*f + e*t - e*u + f*f - 2*f*t - f*u + t*t + t*u + u*u);
+else 
+L_s_plus = sqrt(c*c + 2*c*e + 2*c*f + c*t + 2*c*u + e*e + 2*e*f + e*t + 2*e*u + f*f + f*t + 2*f*u + t*t + t*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<703> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<704> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<705> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<706> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<707> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<708> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<709> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<710> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<711> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<712> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<713> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(b*b + b*s + 2*b*u + s*s + s*u + u*u);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<714> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<715> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<716> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<717> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<718> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<719> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<720> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<721> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<722> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<723> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<724> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = e*e;
+ld BC2 = b*b + b*s + 2*b*u + s*s + s*u + u*u;
+ld CA2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(b*e + e*s + e*u <= 0) 
+L_s_plus = sqrt(b*b - b*e + b*s + 2*b*u + e*e - 2*e*s - e*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b + 2*b*e + b*s + 2*b*u + e*e + e*s + 2*e*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<725> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<726> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<727> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<728> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<729> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<730> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<731> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<732> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<733> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<734> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<735> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus;
+ld AB2 = b*b + b*e + b*s + 2*b*u + e*e - e*s + e*u + s*s + s*u + u*u;
+ld BC2 = b*b + b*f + b*s + 2*b*u + f*f + 2*f*s + f*u + s*s + s*u + u*u;
+ld CA2 = e*e + e*f + f*f;
+if(AB2 + BC2 + sqrt(AB2 * BC2) < CA2) L_s_plus = sqrt(AB2)+sqrt(BC2);
+else if(BC2 + CA2 + sqrt(BC2 * CA2) < AB2) L_s_plus = sqrt(BC2)+sqrt(CA2);
+else if(CA2 + AB2 + sqrt(CA2 * AB2) < BC2) L_s_plus = sqrt(CA2)+sqrt(AB2);
+else {
+if(true) 
+L_s_plus = sqrt(b*b + 2*b*e + 2*b*f + b*s + 2*b*u + e*e + 2*e*f + e*s + 2*e*u + f*f + f*s + 2*f*u + s*s + s*u + u*u);
+else 
+L_s_plus = sqrt(b*b - b*e - b*f + b*s + 2*b*u + e*e - e*f - 2*e*s - e*u + f*f + f*s - f*u + s*s + s*u + u*u);
+}
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<736> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<737> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<738> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<739> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<740> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<741> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<742> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<743> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<744> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<745> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<746> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<747> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<748> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<749> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<750> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<751> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<752> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<753> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<754> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<755> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<756> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<757> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<758> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<759> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = 0;
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<760> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<761> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<762> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<763> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<764> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<765> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<766> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<767> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<768> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<769> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<770> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<771> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<772> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<773> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<774> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<775> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(d*d + 2*d*s + d*t + d + s*s + s*t + s + t*t + 2*t + 1);
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<776> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<777> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<778> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<779> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(c*c - c*s + c*t + c + s*s + s*t + s + t*t + 2*t + 1) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<780> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<781> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(b*b + b + 1) + sqrt(c*c + c*d + d*d) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<782> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b - 2*b*c + b*s - b*t + c*c - c*s + c*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+template<> struct F<783> {
+ld operator()(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f) {
+if(!(__f1_detail::X_cond(s,u,e) && (F_VAL == 1 ? true : false)) || (mono_mask | 0) != 0) return INF;
+ld A_X = __f1_detail::AX_upper_bound(s, u, e);
+ld L_s_minus = b + c + d + e + f + s + t + u + 1;
+ld L_t = A_X + sqrt(c*c + c*d + d*d) + sqrt(b*b + b*d + b*s - b*t + d*d + 2*d*s + d*t + s*s + s*t + t*t) + sqrt(max(d*d + d*t + t*t, d*d + d*t - d*u + t*t + t*u + u*u, d*d - 2*d*f + d*t - d*u + f*f - f*t + f*u + t*t + t*u + u*u));
+ld L_s_plus = sqrt(e*e + e*f + f*f);
+return rho*L_t + L_s_plus - L_s_minus;
+}};
+
+const int M1 = 784;
+

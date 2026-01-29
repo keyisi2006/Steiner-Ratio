@@ -2,10 +2,9 @@
 using namespace std;
 using ld = double;
 using ull = unsigned long long;
-const ld rho = 0.856, INF = 1e18, eps = 1e-6, sqrt3 = sqrt(3.0l);
-const int n = 5;
-const int F_VAL = 2; // 1 for f = 0; 2 for f = d
-const string file_name = format("unbounded_rho={}_f={}.csv", rho, F_VAL == 1 ? "0"s : "d"s);
+const ld rho = 0.8559, INF = 1e18, eps = 1e-6;
+const int F_VAL = 1; // 1 for f <= t
+const int n = 8;
 
 template<typename... Args>
 ld max(ld a, ld b, ld c, Args... args)
@@ -22,35 +21,33 @@ constexpr bool isinfinity(ld x)
 using Box = array<array<ld, 2>, n>;
 using Point = array<ld, n>;
 
-const array<string, n> vars = {"b", "c", "d", "s", "e"};
+const array<string, n> vars = {"b", "c", "d", "s", "t", "u", "e", "f"};
 
-bool glob_cond(ld b, ld c, ld d, ld s, ld e)
+bool glob_cond(ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f)
 {
-	return true;
+	return max(c,d) <= max(b,(ld)1) && f <= t;
 }
 
 template<int>
 struct F;
 
-# include "formulas/F0"
-# include "formulas/F1"
-# include "formulas/F2"
-# include "formulas/F3"
-# include "formulas/F4"
-# include "formulas/F5"
-# include "formulas/F6"
-# include "formulas/F7"
-# include "formulas/F8"
-# include "formulas/F9"
+# include "F0"
+# include "F1"
+# include "F2"
+# include "F3"
+# include "F4"
+# include "F5"
+# include "F6"
+# include "F7"
+# include "F8"
 
-const int m = M9;
+const int m = M8;
 
 template<template<int> class F, int N>
-auto eval_all(ull mono_mask, ld b, ld c, ld d, ld s, ld e)
+auto eval_all(ull mono_mask, ld b, ld c, ld d, ld s, ld t, ld u, ld e, ld f)
 {
-	ld f = F_VAL == 1 ? 0 : d;
 	auto imp = [&]<int... I>(integer_sequence<int, I...>) -> array<ld, sizeof...(I)> {
-		return {F<I>{}(mono_mask, b, c, d, s, e, f)...};
+		return {F<I>{}(mono_mask, b, c, d, s, t, u, e, f)...};
 	};
 	return imp(make_integer_sequence<int, N>{});
 }
@@ -115,14 +112,14 @@ int main()
 		unique_lock lock(pool.mut, defer_lock);
 		while(true)
 		{
+			lock.lock();
+			iter++;
+			if(iter % 10000 == 0) cerr<<iter<<" "<<certified.size()<<endl;
+			if(iter > 1e9) break;
+			lock.unlock();
 			auto h = pool.try_pop();
 			if(!h.has_value()) break;
 			auto box = *h;
-			lock.lock();
-			iter++;
-			if(iter % 100000 == 0) cerr<<iter<<" "<<certified.size()<<endl;
-			if(iter > 2e7) break;
-			lock.unlock();
 			bool not_in_domain = true;
 			corners.clear();
 			for(ull mask = 0; mask < 1ull<<n; mask++)
@@ -134,8 +131,8 @@ int main()
 					p[i] = (mask >> i) & 1 ? box[i][0] : box[i][1];
 					if(isinfinity(p[i])) no_inf = false;
 				}
-				if(no_inf) corners.push_back(move(p));
 				if(apply(glob_cond, p)) not_in_domain = false;
+				if(no_inf) corners.push_back(move(p));
 			}
 			if(not_in_domain)
 			{
@@ -178,7 +175,7 @@ int main()
 		}
 	};
 
-	auto n_threads = thread::hardware_concurrency();
+	auto n_threads = min(thread::hardware_concurrency(), 50u);
 	cout<<"n_threads = "<<n_threads<<endl;
 	vector<thread> workers;
 	workers.reserve(n_threads);
@@ -190,10 +187,16 @@ int main()
 	maxn.fill(0); minn.fill(INF);
 	cout<<certified.size()<<" "<<pool.que.size()<<endl;
 	ld unproven_area = 0, box_area = 1;
+	int ccc = 0;
 	while(!pool.que.empty())
 	{
 		auto box = pool.que.front(); pool.que.pop();
 		ld vol = 1;
+		if((++ccc) <= 10)
+		{
+			for(int i = 0; i < n; i++) cout<<box[i][0]<<" "<<box[i][1]<<endl;
+			cout<<endl;
+		}
 		for(int i = 0; i < n; i++)
 		{
 			vol *= box[i][1] - box[i][0];
@@ -205,6 +208,7 @@ int main()
 	for(int i = 0; i < n; i++) box_area *= max(maxn[i] - minn[i], 0.);
 	cout<<unproven_area<<" "<<box_area<<endl;
 	for(int i = 0; i < n; i++) cout<<vars[i]<<" in ["<<minn[i]<<", "<<maxn[i]<<"]"<<endl;
+
 	// cout<<file_name<<endl;
 	// ofstream fout(file_name);
 	// fout<<fixed<<setprecision(20);
