@@ -7,7 +7,7 @@ The directory contains two folders `certificate/` and `pipeline/`.
 
 ## 📃 Certificate
 
-![](certificate/structure.png)
+![](structure.png)
 
 Please refer to Figure 10 in the paper to understand how we deal with geometric spaces. Note that variable names in the code have a little difference from those in the paper. Please refer to the picture above for mapping.
 
