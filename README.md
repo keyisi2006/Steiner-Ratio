@@ -1,6 +1,6 @@
 # Towards Solving the Gilbert-Pollak Conjecture via Large Language Models
 
-The directory contains two folders `certificate/` and `pipeline/`.
+This repository is the supplementary material of [this paper](https://arxiv.org/pdf/2601.22365). The directory contains two folders `certificate/` and `pipeline/`.
 
 - 📃 If you want to quickly verify our theoretical result $\rho = 0.8559$, please refer to the `certificate/` folder;
 - 🤖 If you want to understand how our LLM-Agent pipeline works, please refer to the `pipeline/` folder.
@@ -11,30 +11,7 @@ The directory contains two folders `certificate/` and `pipeline/`.
 
 Please refer to Figure 10 in the paper to understand how we deal with geometric spaces. Note that variable names in the code have a little difference from those in the paper. Please refer to the picture above for mapping.
 
-There are 2 subfolders `d_regular/` and `d_steiner/` here, corresponding to two cases.
-
-If you want to run the full verification, please run the following 4 files in order:
-
-```
-cd d_regular
-
-make plot_f_le_d
-./plot_f_le_d       # Case 1.1: D regular, f <= d  
-
-make plot_f_ge_d
-./plot_f_ge_d       # Case 1.2: D regular, f >= d
-
-cd ..
-cd d_steiner
-
-make plot_f_le_t
-./plot_f_le_t       # Case 2.1: D Steiner, f <= t
-
-make plot_f_ge_t
-./plot_f_ge_t       # Case 2.2: D Steiner, f >= t
-``` 
-
-Note that the complete process may take dozens of hours.
+There are 2 subfolders `d_regular/` and `d_steiner/` here, corresponding to two cases. Please refer to `certificate/README.md` for details.
 
 ## 🤖 Pipeline
 

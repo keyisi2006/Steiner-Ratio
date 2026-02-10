@@ -5,7 +5,7 @@ using ull = unsigned long long;
 const ld rho = 0.8559, INF = 1e18, eps = 1e-6, sqrt3 = sqrt(3.0l);
 const int n = 6;
 const int F_VAL = 1; // 1 for f <= d
-const string file_name = format("unbounded_rho={}_{}.csv", rho, F_VAL == 1 ? "f_le_d"s : "f_ge_d"s);
+const string suffix = format("_rho={}_{}.bin", rho, F_VAL == 1 ? "f_le_d"s : "f_ge_d"s);
 
 template<typename... Args>
 ld max(ld a, ld b, ld c, Args... args)
@@ -32,18 +32,17 @@ bool glob_cond(ld b, ld c, ld d, ld s, ld e, ld f)
 template<int>
 struct F;
 
-# include "F0"
-# include "F1"
-# include "F2"
-# include "F3"
-# include "F4"
-# include "F5"
-# include "F6"
-# include "F7"
-# include "F8"
-# include "F9"
+# include "formulas/F0"
+# include "formulas/F1"
+# include "formulas/F2"
+# include "formulas/F3"
+# include "formulas/F4"
+# include "formulas/F5"
+# include "formulas/F6"
+# include "formulas/F7"
+# include "formulas/F8"
 
-const int m = M9;
+const int m = M8;
 
 template<template<int> class F, int N>
 auto eval_all(ull mono_mask, ld b, ld c, ld d, ld s, ld e, ld f)
@@ -54,17 +53,37 @@ auto eval_all(ull mono_mask, ld b, ld c, ld d, ld s, ld e, ld f)
 	return imp(make_integer_sequence<int, N>{});
 }
 
+template<template<int> class F, int N>
+constexpr auto make_split_id_array()
+{
+	auto imp = [&]<int... I>(integer_sequence<int, I...>) -> array<int, sizeof...(I)> {
+		return {F<I>::split_id...};
+	};
+	return imp(make_integer_sequence<int, N>{});
+}
+constexpr auto split_ids = make_split_id_array<F, m>();
+
+template<template<int> class F, int N>
+constexpr auto make_lemma_id_array()
+{
+	auto imp = [&]<int... I>(integer_sequence<int, I...>) -> array<int, sizeof...(I)> {
+		return {F<I>::lemma_id...};
+	};
+	return imp(make_integer_sequence<int, N>{});
+}
+constexpr auto lemma_ids = make_lemma_id_array<F, m>();
+
 template<typename T>
 struct TaskPool
 {
-	queue<T> que;
-	size_t working;
+	queue<pair<size_t, T>> que;
+	size_t working, tot;
 	bool stop;
 	mutex mut;
 	condition_variable cv;
 
-	TaskPool() : working(0), stop(false) {}
-	optional<T> try_pop()
+	TaskPool() : working(0), tot(0), stop(false) {}
+	optional<pair<size_t, T>> try_pop()
 	{
 		unique_lock lock(mut);
 		cv.wait(lock, [&]{return stop || !que.empty();});
@@ -74,20 +93,30 @@ struct TaskPool
 		return head;
 	}
 	template<typename Arg>
-	void push(Arg &&arg)
+	size_t push(Arg &&arg)
 	{
 		lock_guard lock(mut);
-		que.push(forward<Arg>(arg));
+		size_t ID = ++ tot;
+		que.emplace(ID, forward<Arg>(arg));
 		cv.notify_one();
+		return ID;
+	}
+	template<typename Arg>
+	size_t _unlocked_push(Arg &&arg)
+	{
+		int ID = ++ tot;
+		que.emplace(ID, forward<Arg>(arg));
+		return ID;
 	}
 	template<typename... Args>
-	void push_children(Args&&... args)
+	auto push_children(Args&&... args)
 	{
 		lock_guard lock(mut);
-		(que.push(forward<Args>(args)), ...);
+		auto ret = make_tuple(_unlocked_push(forward<Args>(args)) ...);
 		working--;
 		if(que.empty() && working == 0) stop = true;
 		cv.notify_all();
+		return ret;
 	}
 };
 
@@ -104,7 +133,8 @@ int main()
 		pool.push(move(box));
 	}
 
-	vector<pair<Box, int>> certified;
+	vector<tuple<size_t, Box, int>> certified;
+	vector<pair<size_t, size_t>> child;
 
 	auto worker = [&]()
 	{
@@ -116,7 +146,7 @@ int main()
 		{
 			auto h = pool.try_pop();
 			if(!h.has_value()) break;
-			auto box = *h;
+			auto [ID, box] = *h;
 			lock.lock();
 			iter++;
 			if(iter % 100000 == 0) cerr<<iter<<" "<<certified.size()<<endl;
@@ -139,7 +169,7 @@ int main()
 			if(not_in_domain)
 			{
 				lock.lock();
-				certified.emplace_back(move(box), -1);
+				certified.emplace_back(ID, move(box), -1);
 				lock.unlock();
 				pool.push_children();
 				continue;
@@ -160,7 +190,7 @@ int main()
 			if(maxn[id] < -eps)
 			{
 				lock.lock();
-				certified.emplace_back(move(box), id);
+				certified.emplace_back(ID, move(box), id);
 				lock.unlock();
 				pool.push_children();
 				continue;
@@ -173,7 +203,10 @@ int main()
 			Box boxl = box, boxr = box;
 			if(isinfinity(box[dim][1])) boxl[dim][1] = boxr[dim][0] = 2 * box[dim][0];
 			else boxl[dim][1] = boxr[dim][0] = (box[dim][0] + box[dim][1]) / 2;
-			pool.push_children(move(boxl), move(boxr));
+			auto [left_ID, right_ID] = pool.push_children(move(boxl), move(boxr));
+			lock_guard lock(pool.mut);
+			if(child.size() < ID + 1) child.resize(ID + 1);
+			child[ID] = {left_ID, right_ID};
 		}
 	};
 
@@ -183,6 +216,7 @@ int main()
 	workers.reserve(n_threads);
 	for(unsigned _ = 0; _ < n_threads; _++) workers.emplace_back(worker);
 	for(auto &&t : workers) t.join();
+	child.resize(pool.tot + 1);
 
 	cout<<fixed<<setprecision(20);
 	Point maxn, minn;
@@ -191,7 +225,7 @@ int main()
 	ld unproven_area = 0, box_area = 1;
 	while(!pool.que.empty())
 	{
-		auto box = pool.que.front(); pool.que.pop();
+		auto [_, box] = pool.que.front(); pool.que.pop();
 		ld vol = 1;
 		for(int i = 0; i < n; i++)
 		{
@@ -204,15 +238,29 @@ int main()
 	for(int i = 0; i < n; i++) box_area *= max(maxn[i] - minn[i], 0.);
 	cout<<unproven_area<<" "<<box_area<<endl;
 	for(int i = 0; i < n; i++) cout<<vars[i]<<" in ["<<minn[i]<<", "<<maxn[i]<<"]"<<endl;
-	// cout<<file_name<<endl;
-	// ofstream fout(file_name);
-	// fout<<fixed<<setprecision(20);
-	// for(int i = 0; i < n; i++) fout<<vars[i]<<"_min"<<","<<vars[i]<<"_max"<<",";
-	// fout<<"id\n";
-	// for(auto &&[box, id] : certified)
-	// {
-	// 	for(int i = 0; i < n; i++) fout<<box[i][0]<<","<<box[i][1]<<",";
-	// 	fout<<id<<"\n";
-	// }
+	ofstream fcert("certificate" + suffix, ios::binary);
+	for(auto &&[ID, box, id] : certified)
+	{
+		fcert.write((char *)&ID, 4);
+		for(int i = 0; i < n; i++)
+		{
+			fcert.write((char *)&box[i][0], sizeof(box[i][0]));
+			fcert.write((char *)&box[i][1], sizeof(box[i][1]));
+		}
+		int split_id = -1, lemma_id = -1;
+		if(id >= 0)
+		{
+			split_id = split_ids[id];
+			lemma_id = lemma_ids[id];
+		}
+		fcert.write((char *)&split_id, 4);
+		fcert.write((char *)&lemma_id, 4);
+	}
+	ofstream fchild("child" + suffix, ios::binary);
+	for(size_t i = pool.tot; i >= 1; i--)
+	{
+		fchild.write((char *)&child[i].first, 4);
+		fchild.write((char *)&child[i].second, 4);
+	}
 	return 0;
 }

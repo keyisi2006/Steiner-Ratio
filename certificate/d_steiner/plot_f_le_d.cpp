@@ -2,9 +2,9 @@
 using namespace std;
 using ld = double;
 using ull = unsigned long long;
-const ld rho = 0.8559, INF = 1e18, eps = 1e-6, sqrt3 = sqrt(3.0l);
-const int n = 5;
-const int F_VAL = 2; // 2 for f >= d
+const ld rho = 0.8559, INF = 1e18, eps = 1e-6;
+const int n = 8;
+const int F_VAL = 1; // 1 for f <= d
 const string suffix = format("_rho={}_{}.bin", rho, F_VAL == 1 ? "f_le_d"s : "f_ge_d"s);
 
 template<typename... Args>
@@ -22,11 +22,11 @@ constexpr bool isinfinity(ld x)
 using Box = array<array<ld, 2>, n>;
 using Point = array<ld, n>;
 
-const array<string, n> vars = {"b", "c", "d", "s", "e"};
+const array<string, n> vars = {"b", "c", "d", "s", "u", "v", "e", "f"};
 
-bool glob_cond(ld b, ld c, ld d, ld s, ld e)
+bool glob_cond(ld b, ld c, ld d, ld s, ld u, ld v, ld e, ld f)
 {
-	return true;
+	return max(u, v) <= max(b, (ld)1) && f <= d;
 }
 
 template<int>
@@ -45,11 +45,10 @@ struct F;
 const int m = M8;
 
 template<template<int> class F, int N>
-auto eval_all(ull mono_mask, ld b, ld c, ld d, ld s, ld e)
+auto eval_all(ull mono_mask, ld b, ld c, ld d, ld s, ld u, ld v, ld e, ld f)
 {
-	ld f = d;
 	auto imp = [&]<int... I>(integer_sequence<int, I...>) -> array<ld, sizeof...(I)> {
-		return {F<I>{}(mono_mask, b, c, d, s, e, f)...};
+		return {F<I>{}(mono_mask, b, c, d, s, u, v, e, f)...};
 	};
 	return imp(make_integer_sequence<int, N>{});
 }
@@ -150,7 +149,7 @@ int main()
 			auto [ID, box] = *h;
 			lock.lock();
 			iter++;
-			if(iter % 100000 == 0) cerr<<iter<<" "<<certified.size()<<endl;
+			if(iter % 10000 == 0) cerr<<iter<<" "<<certified.size()<<endl;
 			if(iter > 1e9) break;
 			lock.unlock();
 			bool not_in_domain = true;
