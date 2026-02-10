@@ -52,7 +52,7 @@ def compile_plot(src: Path, out: Path):
   # Use the same flags as the Makefile's plot target
   flags = [
     '-O3', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-variable',
-    '-std=c++23', '-ffast-math'
+    '-std=c++23', '-pthread', '-ffast-math'
   ]
   cmd = [gpp] + flags + [str(src), '-o', str(out)]
   run(cmd)
@@ -138,7 +138,7 @@ def main():
       llm_cmd += ['--bottleneck', str(bottleneck_file)]
     if improve_type == 'splus':
       try:
-        run([sys.executable, 'split_rho', str(bottleneck_file)], cwd=workdir)
+        run([workdir / 'split_rho', str(bottleneck_file)], cwd=workdir)
       except Exception as e:
         print('split_rho failed:', e)
         break

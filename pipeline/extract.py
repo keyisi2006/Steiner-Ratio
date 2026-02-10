@@ -25,17 +25,21 @@ if __name__ == '__main__':
     # Extract the (unique) fenced code block delimited by triple backticks
     code_lines = []
     in_code = False
+    is_cpp = False
     for line in lines:
         stripped = line.rstrip('\n')
         if stripped.strip().startswith('```'):
             # toggle code block state: opening or closing fence
             if not in_code:
                 in_code = True
+                if 'cpp' in stripped:
+                    is_cpp = True
+                else:
+                    is_cpp = False
                 continue
             else:
                 in_code = False
-                break
-        if in_code:
+        if in_code and is_cpp:
             code_lines.append(stripped)
 
     if not code_lines:

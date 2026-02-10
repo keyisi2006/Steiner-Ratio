@@ -49,7 +49,7 @@ def compile_plot(src: Path, out: Path):
     wsl_out = win_to_wsl(out_noexe)
     flags = ' '.join([
         '-O3', '-Wall', '-Wextra', '-Wno-unused-parameter', '-Wno-unused-variable',
-        '-std=c++23', '-ffast-math'
+        '-std=c++23', '-pthread', '-ffast-math'
     ])
     cmd_str = f"g++ {flags} '{wsl_src}' -o '{wsl_out}'"
     print('Running in WSL:', cmd_str)
